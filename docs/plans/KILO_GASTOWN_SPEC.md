@@ -195,9 +195,11 @@ This Kilo Gastown spec complements existing worktree-manager documentation:
 
 | Document | Focus |
 |----------|-------|
-| `CLAUDE.md` | Development guidelines for AI assistants |
+| `CLAUDE.md` | Development guidelines for AI assistants (includes architecture principles, Phenotype Org rules) |
 | `AGILEPLUS_SPEC.md` | AgilePlus methodology (hexagonal, SOLID, PoLA) |
 | `KILO_GASTOWN_SPEC.md` | Agent orchestration and coordination |
+
+Note: `AGENTS.md` is not present in this repo; all agent guidance is consolidated in `CLAUDE.md`.
 
 ### 7.2 Phenotype Org Rules (from CLAUDE.md)
 
@@ -288,7 +290,7 @@ Format: `{name}-polecat-{rig_id}@{town_id}`
 
 | Document | Location | Purpose |
 |----------|----------|---------|
-| CLAUDE.md | Root | Development guidelines |
+| CLAUDE.md | Root | Development guidelines (architecture, Phenotype Org rules) |
 | AGILEPLUS_SPEC.md | docs/plans/ | AgilePlus methodology |
 | ADR.md | Root | Architecture decisions |
 | PRD.md | Root | Product requirements |
