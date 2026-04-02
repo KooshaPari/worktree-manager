@@ -165,7 +165,7 @@ impl Default for SimpleFilesystemAdapter {
 impl BranchOperations for GitWorktreeAdapter {
     fn exists(&self, repo_path: &Path, branch: &BranchName) -> DomainResult<bool> {
         let output = self.run_git(repo_path, &["rev-parse", "--verify", &format!("origin/{}", branch.as_str())])?;
-        Ok(output.trim().len() > 0)
+        Ok(!output.trim().is_empty())
     }
 
     fn create(&self, repo_path: &Path, branch: &BranchName, from_ref: Option<&str>) -> DomainResult<()> {

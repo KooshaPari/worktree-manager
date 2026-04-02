@@ -23,7 +23,7 @@ fn main() -> anyhow::Result<()> {
     // Determine repo path
     let repo_path = cli.repo
         .map(Ok)
-        .unwrap_or_else(|| std::env::current_dir())?;
+        .unwrap_or_else(std::env::current_dir)?;
 
     // Create adapter and service
     let adapter = GitWorktreeAdapter::new();
