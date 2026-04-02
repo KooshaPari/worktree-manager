@@ -9,6 +9,9 @@ repository = "https://github.com/phenotype-dev/worktree-manager"
 keywords = ["git", "worktree", "devops", "automation"]
 categories = ["development-tools", "version-control"]
 
+[workspace]
+members = []
+
 [lib]
 name = "worktree_manager"
 path = "src/worktree_manager/mod.rs"
