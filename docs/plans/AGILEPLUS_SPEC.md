@@ -27,6 +27,8 @@ The worktree-manager follows strict hexagonal architecture with clear layer isol
 | **Application** | Use case orchestration | Domain, Ports |
 | **Infrastructure** | External adapters (git, fs) | Domain, Ports |
 
+**Note on Serialization:** `serde` and `chrono` are used exclusively in the infrastructure layer for persistence concerns (e.g., storing worktree state to disk). They do NOT pollute the domain layer—pure domain logic has zero external dependencies.
+
 **Rationale:** This separation ensures the core business logic remains testable and independent of infrastructure concerns. The domain layer can evolve without being coupled to git implementation details.
 
 ### 2.2 SOLID Principles
@@ -50,6 +52,8 @@ The worktree-manager follows strict hexagonal architecture with clear layer isol
 **Aggregates:**
 - `Worktree` - Core entity with path, branch, head, lock status
 - `CleanupPolicy` - Encapsulates cleanup rules and thresholds
+- `WorktreeListing` - Aggregates multiple worktrees for listing operations
+- `WorktreeResult` - Result wrapper for worktree operations
 
 **Domain Events (implicit):**
 - Worktree created/removed/locked/unlocked
@@ -64,6 +68,7 @@ The worktree-manager follows strict hexagonal architecture with clear layer isol
 - **Canonical Repository:** Always remains on `main`
 - **Worktrees for Features:** Each feature/fix uses a dedicated worktree
 - **Naming Convention:** `feature/<topic>`, `fix/<issue>`, `refactor/<module>`
+- **Convoy Branch Convention:** `convoy/<feature>/<convoy-id>/gt/<agent>/<bead-id>` - For coordinated multi-agent work on the same feature
 
 ### 3.2 Commit Hygiene
 
@@ -94,12 +99,18 @@ AgilePlus applies the **Principle of Least Astonishment** to error design:
 
 ```rust
 // Domain errors are specific and actionable
-AlreadyExists    // "Worktree already exists at path"
-NotFound         // "No worktree found at path"
-BranchExists     // "Branch 'feature/x' already exists"
-CannotModifyMain // "Main worktree cannot be modified"
-Locked           // "Worktree is locked: {reason}"
-Stale            // "Worktree has stale references"
+AlreadyExists        // "Worktree already exists at path"
+NotFound             // "No worktree found at path"
+BranchExists         // "Branch 'feature/x' already exists"
+CannotModifyMain     // "Main worktree cannot be modified"
+Locked               // "Worktree is locked: {reason}"
+Stale                // "Worktree has stale references"
+BranchNotFound       // "Branch '{branch}' not found"
+UnmergedChanges      // "Worktree has unmerged changes: {path}"
+InvalidBranchName    // "Invalid branch name: {name}"
+InvalidPath          // "Invalid path: {path}"
+GitError             // "Git operation failed: {detail}"
+IoError              // "IO error: {detail}"
 ```
 
 ### 4.2 Error Communication
